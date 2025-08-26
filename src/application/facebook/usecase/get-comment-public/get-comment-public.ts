@@ -13,6 +13,7 @@ import { IGetCmtPublicResponse } from "./get-comment-public.i";
 import { GetInfoLinkUseCase } from "../get-info-link/get-info-link";
 import { LinkEntity, LinkType } from "src/application/links/entities/links.entity";
 import { SettingService } from "src/application/setting/setting.service";
+import { SocketService } from "src/infra/socket/socket.service";
 
 dayjs.extend(utc);
 
@@ -27,6 +28,7 @@ export class GetCommentPublicUseCase {
         private redisService: RedisService,
         private getInfoLinkUseCase: GetInfoLinkUseCase,
         private settingService: SettingService,
+        private socketService: SocketService,
     ) { }
 
 
@@ -89,7 +91,7 @@ export class GetCommentPublicUseCase {
                 const data = JSON.parse(lines[0])
                 dataComment = handleDataComment({ data })
             }
-            // if (postId === '122152432436381034') console.log(dataComment)
+            this.socketService.emit('receiveMessage', { ...dataComment, linkId: link.id })
             if (dataComment) {
                 const key = `${link.id}_${dataComment.commentCreatedAt.replaceAll("-", "").replaceAll(" ", "").replaceAll(":", "")}`
                 const isExistKey = await this.redisService.checkAndUpdateKey(key)
