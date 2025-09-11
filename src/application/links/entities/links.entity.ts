@@ -109,6 +109,9 @@ export class LinkEntity {
   @Column({ default: false })
   priority: boolean;
 
+  @Column({ default: false, name: 'is_deleted' })
+  isDelete: Boolean;
+
   @Column({ name: 'thread' })
   thread: number;
 

@@ -145,7 +145,8 @@ export class LinkService {
         type: Not(LinkType.DIE),
         delayTime: MoreThanOrEqual(0),
         hideCmt: false,
-        priority: true
+        priority: true,
+        isDelete: false
       },
       relations: {
         user: true
